@@ -2,7 +2,7 @@ function OnStoredInstance(instanceID, tags, metadata, origin)
 	PrintRecursive(instanceID)
 	if origin['RequestedOrigin'] ~= 'Lua' then
 	local modifiedId
-		if tags['Modality'] == 'CR' then
+		if tags['Modality'] == 'CR' or tags['Modality'] == 'DX'then
 			if tags['ReferringPhysicianName'] == '' then
 				local replace = {}
 				replace['ReferringPhysicianName'] = 'MEDICO SOLICITANTE NAO INFORMADO'
@@ -40,6 +40,8 @@ function OnStoredInstance(instanceID, tags, metadata, origin)
 					modifiedId = ParseJson(RestApiPost('/instances/', modifiedFile)) ['ID']
 					--PrintRecursive(modifiedId)
 				end
+			else
+				modifiedId = instanceID
 			end
 			RestApiPost('/modalities/PRORADIS/store', modifiedId)
 		end
